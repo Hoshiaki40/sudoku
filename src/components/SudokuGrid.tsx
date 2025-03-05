@@ -1,4 +1,3 @@
-// src/components/SudokuGrid.tsx
 import React from "react";
 import { useSudokuStore } from "../store/sudokuStore";
 import { cn } from "../lib/utils";

@@ -1,4 +1,3 @@
-// src/components/ControlPanel.tsx
 import React from "react";
 import { Button } from "./ui/button";
 import {
@@ -29,7 +28,6 @@ export function ControlPanel() {
     React.useState<Difficulty>("medium");
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
-  // Gestionnaire pour les touches numériques
   const handleNumberClick = (number: number) => {
     if (isNoteMode) {
       toggleNote(number);

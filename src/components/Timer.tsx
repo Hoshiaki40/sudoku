@@ -1,4 +1,3 @@
-// src/components/Timer.tsx
 import { useEffect } from "react";
 import { useSudokuStore } from "../store/sudokuStore";
 

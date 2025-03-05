@@ -1,4 +1,3 @@
-import "./App.css";
 import { useSudokuStore } from "./store/sudokuStore";
 import { useEffect } from "react";
 import { SudokuGrid } from "./components/SudokuGrid";
@@ -8,7 +7,6 @@ import { Timer } from "./components/Timer";
 function App() {
   const { gameStatus, initializeGame } = useSudokuStore();
 
-  // Initialiser une nouvelle partie si aucune n'est en cours
   useEffect(() => {
     if (gameStatus === "idle") {
       initializeGame("medium");
@@ -31,6 +29,12 @@ function App() {
         {gameStatus === "paused" && (
           <div className="mb-4 p-3 bg-yellow-100 text-yellow-800 rounded text-center">
             Jeu en pause
+          </div>
+        )}
+
+        {gameStatus === "loading" && (
+          <div className="mb-4 p-3 bg-yellow-100 text-yellow-800 rounded text-center">
+            Jeu en chargement...
           </div>
         )}
 

@@ -1,11 +1,6 @@
-// src/store/sudokuStore.ts
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import {
-  generateFullGrid,
-  createPuzzle,
-  isValidPlacement,
-} from "../utils/sudokuGenerator";
+import { isValidPlacement } from "../utils/sudokuGenerator";
 import { Grid, Position, Difficulty, GameStatus } from "../types/sudoku";
 
 export interface SudokuState {
@@ -42,28 +37,39 @@ export const useSudokuStore = create<SudokuState>()(
         timer: 0,
 
         initializeGame: (difficulty) => {
-          const fullGrid = generateFullGrid();
-          const puzzle = createPuzzle(fullGrid, difficulty);
+          set({ gameStatus: "loading" });
 
-          // Convertir les nombres en structure de cellules
-          const grid: Grid = puzzle.map((row, rowIndex) =>
-            row.map((value, colIndex) => ({
-              value,
-              isGiven: value !== 0,
-              isSelected: false,
-              isInvalid: false,
-              notes: [],
-            }))
+          const worker = new Worker(
+            new URL("../workers/sudokuGenerator.worker", import.meta.url),
+            { type: "module" }
           );
 
-          set({
-            grid,
-            solution: fullGrid,
-            difficulty,
-            selectedCell: null,
-            gameStatus: "playing",
-            timer: 0,
-          });
+          worker.onmessage = (event) => {
+            const { fullGrid, puzzle } = event.data;
+
+            const grid: Grid = puzzle.map((row) =>
+              row.map((value) => ({
+                value,
+                isGiven: value !== 0,
+                isSelected: false,
+                isInvalid: false,
+                notes: [],
+              }))
+            );
+
+            set({
+              grid,
+              solution: fullGrid,
+              difficulty,
+              selectedCell: null,
+              gameStatus: "playing",
+              timer: 0,
+            });
+
+            worker.terminate();
+          };
+
+          worker.postMessage({ difficulty });
         },
 
         selectCell: (position) => {

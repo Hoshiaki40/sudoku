@@ -1,4 +1,3 @@
-// src/types/sudoku.ts
 export type Cell = {
   value: number;
   isGiven: boolean;
@@ -16,4 +15,9 @@ export type Position = {
 
 export type Difficulty = "easy" | "medium" | "hard" | "expert";
 
-export type GameStatus = "idle" | "playing" | "paused" | "completed";
+export type GameStatus =
+  | "idle"
+  | "loading"
+  | "playing"
+  | "paused"
+  | "completed";
