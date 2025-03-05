@@ -47,8 +47,8 @@ export const useSudokuStore = create<SudokuState>()(
           worker.onmessage = (event) => {
             const { fullGrid, puzzle } = event.data;
 
-            const grid: Grid = puzzle.map((row) =>
-              row.map((value) => ({
+            const grid: Grid = puzzle.map((row: number[]) =>
+              row.map((value: number) => ({
                 value,
                 isGiven: value !== 0,
                 isSelected: false,
@@ -92,7 +92,7 @@ export const useSudokuStore = create<SudokuState>()(
         },
 
         enterNumber: (number) => {
-          const { grid, selectedCell, solution } = get();
+          const { grid, selectedCell } = get();
 
           if (
             !selectedCell ||
